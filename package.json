@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/server.js",
   "scripts": {
-    "build-ts": "tsc",
+    "build-ts": "tsc --listFiles",
     "start": "npm run serve",
     "serve": "concurrently npm:watch-*",
     "watch-node": "nodemon dist/server.js",
@@ -20,6 +20,7 @@
     "concurrently": "^4.0.1",
     "nodemon": "^1.18.4",
     "tslint": "^5.11.0",
+    "tslint-config-prettier": "^1.15.0",
     "typescript": "^3.1.1"
   },
   "dependencies": {
