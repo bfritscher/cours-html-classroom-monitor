@@ -1,0 +1,19 @@
+version: '3'
+services:
+  web:
+    build: .
+    ports:
+      - "8080:80"
+    env_file: .env
+    depends_on:
+      - db
+    restart: always
+  db:
+    image: postgres:9.6
+    env_file: .env
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    restart: always
+volumes:
+   db-data:
+     driver: local

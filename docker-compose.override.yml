@@ -1,0 +1,10 @@
+version: '3'
+services:
+  web:
+    ports:
+      - "3033:3033"
+    volumes:
+      - ./dist:/app/dist
+  db:
+    ports:
+      - "5432:5432"
