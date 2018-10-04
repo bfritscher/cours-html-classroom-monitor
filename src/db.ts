@@ -1,3 +1,4 @@
+import { SubmissionAttribute, SubmissionInstance } from "db";
 import Sequelize from "sequelize";
 
 export const sequelize = new Sequelize(
@@ -6,7 +7,7 @@ export const sequelize = new Sequelize(
   }@db:5432/${process.env.POSTGRES_DB}`
 );
 
-export const Submission = sequelize.define(
+export const Submission = sequelize.define<SubmissionInstance, SubmissionAttribute>(
   "submission",
   {
     assignment: { type: Sequelize.STRING, primaryKey: true },
@@ -46,4 +47,10 @@ export const Submission = sequelize.define(
   }
 );
 
-export const ready = sequelize.sync();
+function ensureConnection():Promise<any> {
+  return new Promise((resolve, reject) => {
+    sequelize.sync().then(resolve, ensureConnection)
+  })
+}
+
+export const dbReady = ensureConnection();

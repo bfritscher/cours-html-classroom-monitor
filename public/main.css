@@ -1,3 +1,18 @@
 body {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
+
+body.admin .admin-hide {
+    display: none;
+}
+
+.admin-show {
+    display: none;
+}
+
+body.admin .admin-show {
+    display: inherit;
+}
+.toast {
+    display: none;
+}
