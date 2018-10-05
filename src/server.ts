@@ -1,7 +1,14 @@
 import bodyParser from "body-parser";
 import express from "express";
+import pg from "pg";
+import Sequelize from "sequelize";
+
 import { dbReady, Submission } from "./db";
+
 import User from "./User";
+
+
+pg.defaults.parseInt8 = true
 
 const urlencodeParser = bodyParser.urlencoded({ extended: false });
 
@@ -46,6 +53,32 @@ app.post(
 );
 
 app.post(
+  "/api/submissions",
+  ensureUser,
+  (req: express.Request, res: express.Response) => {
+    const query: any = {
+      where: {}
+    };
+    if (!req.user.isAdmin) {
+      query.where.user = req.user.email;
+    }
+    if (req.body.assignment) {
+      query.where.assignment = req.body.assignment;
+    }
+    if (req.user.isAdmin && !req.body.assignment) {
+      query.group = "assignment";
+      query.attributes = ["assignment",
+        [Sequelize.fn('COUNT', Sequelize.col('*')), 'nb']];
+    }
+    Submission.findAll(query).then(submissions => {
+      res.json(submissions);
+    }, () => {
+      res.sendStatus(500);
+    });
+  }
+);
+
+app.post(
   "/api/submit",
   ensureUser,
   (req: express.Request, res: express.Response) => {
@@ -73,15 +106,17 @@ app.post(
         url: req.body.url
       };
       const instance = Submission.build(data);
-      instance.validate().then(() => {
-        return Submission.upsert(data)
-          .then(created => {
+      instance
+        .validate()
+        .then(() => {
+          return Submission.upsert(data).then(created => {
             res.sendStatus(200);
             // TODO: queue parsing
           });
-      }).catch(() => {
-        res.sendStatus(500);
-      });
+        })
+        .catch(() => {
+          res.sendStatus(500);
+        });
     }
   }
 );
@@ -101,11 +136,13 @@ app.post("/api/update", (req: express.Request, res: express.Response) => {
 
 /*
 -> trigger queue
+-> run process jest passing url via env variable?
+-> collect json result
+-> update db
 
-display listing
+display listing with pictures & eval
+
 force update all of assignment if admin
-pageres task
-
 */
 dbReady.then(() => {
   console.log("sequelize synced");

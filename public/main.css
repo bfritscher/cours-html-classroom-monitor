@@ -2,17 +2,24 @@ body {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
-body.admin .admin-hide {
+body.admin .admin-hide,
+body.assignment .assignment-hide {
     display: none;
 }
 
-.admin-show {
+.admin-show,
+.assignment-show {
     display: none;
 }
 
-body.admin .admin-show {
+body.admin .admin-show,
+body.assignment .assignment-show {
     display: inherit;
 }
-.toast {
+.assignment-show .toast {
     display: none;
+}
+
+h2 {
+    margin-top: 30px;
 }

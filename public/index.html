@@ -14,7 +14,7 @@
 <body>
     <header class="navbar">
         <section class="navbar-section p-2">
-            <a href="" class="navbar-brand mr-2">Classroom HTML Monitor</a>
+            <a href="#" class="navbar-brand mr-2">Classroom HTML Monitor</a>
         </section>
         <section class="navbar-section">
             <div id="user" class="p-2"></div>
@@ -22,32 +22,55 @@
     </header>
     <div class="container">
         <div class="columns">
-            <div class="column col-8  col-mx-auto">
-                <h1>Assignment <span id="assignment"></span></h1>
-                <div id="toast-success" class="toast toast-success">
-                    URL submitted successfully!
-                </div>
-                <div id="toast-error" class="toast toast-error">
-                    Error accepting your URL!
-                </div>
-                <div class="form-group admin-hide">
-                    <label class="form-label" for="input-url-1">URL</label>
-                    <div class="input-group">
-                        <input class="form-input input-lg" id="url" type="url" placeholder="https://monsite">
-                        <button class="btn btn-primary input-group-btn btn-lg" onclick="submitForm()">Send</button>
+            <div class="column col-8 col-mx-auto">
+                <div class="assignment-hide my-2">
+                    <div class="empty">
+                        <div class="empty-icon">
+                            <i class="icon icon-people"></i>
+                        </div>
+                        <p class="empty-title h5">Set an assignments</p>
+                        <div class="empty-action">
+                            <div class="input-group">
+                                <input class="form-input input-lg" id="assignment-input" type="text" placeholder="assignment name">
+                                <button class="btn btn-primary input-group-btn btn-lg" onclick="setAssignment(document.getElementById('assignment-input').value)">Set</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <div class="assignment-show">
+                    <h2>Assignment <span id="assignment"></span></h2>
+                    <div id="toast-success" class="toast toast-success">
+                        URL submitted successfully!
+                    </div>
+                    <div id="toast-error" class="toast toast-error">
+                        Error accepting your URL!
+                    </div>
+                    <div class="form-group admin-hide">
+                        <label class="form-label" for="input-url-1">URL</label>
+                        <div class="input-group">
+                            <input class="form-input input-lg" id="url" type="url" placeholder="https://monsite">
+                            <button class="btn btn-primary input-group-btn btn-lg" onclick="submitForm()">Send</button>
+                        </div>
+                    </div>
 
-                <div class="form-group admin-show">
-                    <label class="form-label admin-show">Batch upload
-                    <textarea class="form-input" id="batch" placeholder="email,url" rows="3"></textarea></label>
+                    <div class="form-group admin-show">
+                        <label class="form-label admin-show">Batch upload
+                            <textarea class="form-input" id="batch" placeholder="email,url" rows="3"></textarea></label>
+                    </div>
+                    <div class="form-group text-right admin-show">
+                        <button class="btn btn-primary btn-lg" onclick="submitForm()">Send</button>
+                    </div>
                 </div>
-                <div class="form-group text-right admin-show">
-                    <button class="btn btn-primary btn-lg" onclick="submitForm()">Send</button>
-                </div>
+                <h2>Submissions</h2>
+                <ul id="submissions">
+
+                </ul>
             </div>
         </div>
     </div>
+    <template id="submission-template">
+        <li></li>
+    </template>
 </body>
 
 </html>

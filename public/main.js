@@ -1,4 +1,5 @@
 const JWT_KEY = "jwt";
+const ASSIGNMENT_KEY = "classroom_html_assignment";
 const jwt = localStorage.getItem(JWT_KEY);
 let toastError;
 let toastSuccess;
@@ -7,20 +8,28 @@ function init() {
   if (!jwt) {
     login();
   } else {
-    // TODO restore assignment hash & delete storage
+    const assignment = localStorage.getItem(ASSIGNMENT_KEY);
+    localStorage.removeItem(ASSIGNMENT_KEY);
+    if(assignment && assignment !== getAssignmentNameFromHash()) {
+        setAssignment(assignment);
+    }
     verifyToken();
   }
-  window.addEventListener("hashchange", retrieveAssignment, false);
+  window.addEventListener("hashchange", assignmentChanged, false);
   toastError = document.getElementById("toast-error");
   toastSuccess = document.getElementById("toast-success");
-  renderAssignment();
+  assignmentChanged();
 }
 
 function login() {
   localStorage.removeItem(JWT_KEY);
-  // TODO save assignment hash
+  localStorage.setItem(ASSIGNMENT_KEY, getAssignmentNameFromHash());
   window.location =
     `https://marmix.ig.he-arc.ch/shibjwt/?reply_to=${location.origin}/api/login`;
+}
+
+function setAssignment(assignment) {
+    window.location.hash = assignment;
 }
 
 function verifyToken() {
@@ -39,8 +48,25 @@ function verifyToken() {
       return res.json();
     })
     .then(renderUser);
-  return false;
 }
+
+function getSubmissions() {
+    fetch("api/submissions", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ jwt, assignment: getAssignmentNameFromHash() })
+    })
+      .then(res => {
+        if (res.status === 403) {
+          return login();
+        }
+        return res.json();
+      })
+      .then(renderSubmissions);
+  }
 
 function submitForm() {
     toastSuccess.style.display = "none";
@@ -70,8 +96,8 @@ function submitForm() {
   return false;
 }
 
-function retrieveAssignment() {
-    console.log('get assignments', getAssignmentNameFromHash())
+function assignmentChanged() {
+    getSubmissions()
     renderAssignment();
 }
 
@@ -89,7 +115,27 @@ function renderUser(user) {
 }
 
 function renderAssignment() {
-    document.getElementById("assignment").innerText = getAssignmentNameFromHash();
+    const assignment = getAssignmentNameFromHash();
+    document.getElementById("assignment").innerText = assignment;
+    document.body.classList.toggle("assignment", assignment !== "");
+}
+
+function renderSubmissions(submissions) {
+    const submissionsContainer = document.getElementById("submissions");
+    while (submissionsContainer.firstChild) {
+        submissionsContainer.removeChild(submissionsContainer.firstChild);
+    }
+    const submissionTemplate = document.getElementById("submission-template");
+    submissions.forEach((s) => {
+        // prefill current url
+        document.getElementById("url").value = s.url;
+        const clone = document.importNode(submissionTemplate.content, true).firstElementChild;
+        clone.addEventListener("click", () => {
+            setAssignment(s.assignment);
+        }, false);
+        clone.innerText = JSON.stringify(s);
+        submissionsContainer.appendChild(clone);
+    })
 }
 
 window.onload = init;
