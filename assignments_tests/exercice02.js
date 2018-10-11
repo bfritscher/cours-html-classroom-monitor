@@ -1,14 +1,12 @@
-
 describe("Exercice02", () => {
   beforeAll(async () => {
-    await page.goto("https://thimbleprojects.org/bfritscher/554246/");
+    await page.goto(process.env.TestURL);
     // remove remix button
-    await page.evaluate(() => {
-        const remix = document.querySelector(".details-bar.cleanslate");
-        if (remix) {
-            remix.remove();
-        }
-    });
+    await removeRemix()
+    await page.screenshot({
+      path: `./public/screenshots/exercice02/${process.env.TestUser}.png`,
+      fullPage: true,
+    })
   });
 
   it("Titre de la page", async () => {
@@ -38,7 +36,7 @@ describe("Exercice02", () => {
     expect(await getInnerText('a[href="https://www.eliseditatable.com/2015/05/crack-pie.html"')).toBe("Elise dit à Table!");
   });
 
-  validateHTML("https://thimbleprojects.org/bfritscher/554246/");
+  validateHTMLcurrentPage();
 
 /*
   it("Apparence", async () => {

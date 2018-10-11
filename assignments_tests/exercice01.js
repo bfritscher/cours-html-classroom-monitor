@@ -1,8 +1,12 @@
 describe("Exercice01", () => {
   beforeAll(async () => {
-    await page.goto("https://thimbleprojects.org/bfritscher/554326/index.html");
+    await page.goto(process.env.TestURL);
     // remove remix button
     await removeRemix();
+    await page.screenshot({
+      path: `./public/screenshots/exercice01/${process.env.TestUser}.png`,
+      fullPage: true,
+    })
   });
 
   describe("index.html (page 1)", () => {
