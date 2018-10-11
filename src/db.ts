@@ -29,7 +29,7 @@ export const Submission = sequelize.define<SubmissionInstance, SubmissionAttribu
       defaultValue: null
     },
     check_content: {
-      type: Sequelize.STRING,
+      type: Sequelize.TEXT,
       allowNull: true,
       defaultValue: null
     }

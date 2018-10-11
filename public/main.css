@@ -23,3 +23,16 @@ body.assignment .assignment-show {
 h2 {
     margin-top: 30px;
 }
+
+.passed {
+    color: green;
+}
+
+.failed {
+    color: red;
+}
+
+.preview {
+    float: right;
+    width: 50%;
+}

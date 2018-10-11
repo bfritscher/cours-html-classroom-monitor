@@ -69,8 +69,11 @@ function getSubmissions() {
   }
 
 function submitForm() {
+    const sendButton = document.getElementById("send");
     toastSuccess.style.display = "none";
     toastError.style.display = "none";
+    renderSubmissions([]);
+    sendButton.disabled = true;
   fetch("api/submit", {
     method: "POST",
     headers: {
@@ -84,12 +87,13 @@ function submitForm() {
       batch: document.getElementById("batch").value
     })
   }).then(res => {
+    sendButton.disabled = false;
     if (res.status === 403) {
         login();
     } else if (res.status === 500) {
         toastError.style.display = "block";
     } else {
-        toastSuccess.style.display = "block";
+        getSubmissions();
     }
   });
 
@@ -120,6 +124,7 @@ function renderAssignment() {
     document.body.classList.toggle("assignment", assignment !== "");
 }
 
+
 function renderSubmissions(submissions) {
     const submissionsContainer = document.getElementById("submissions");
     while (submissionsContainer.firstChild) {
@@ -133,7 +138,31 @@ function renderSubmissions(submissions) {
         clone.addEventListener("click", () => {
             setAssignment(s.assignment);
         }, false);
-        clone.innerText = JSON.stringify(s);
+        if (s.nb) {
+          clone.querySelector(".title").innerHTML = `${s.assignment} (${s.nb})`;
+        } else {
+          clone.querySelector(".title").innerHTML = `${s.email} ${s.check_date}`;
+          if(s.check_status) {
+            clone.querySelector(".status").innerHTML = `${s.check_status}%`;
+            clone.querySelector(".preview").src = `screenshots/${s.assignment}/${s.email}.png?${new Date().getTime()}`;
+          }
+        }
+
+        if (s.check_content) {
+          try {
+            const r = JSON.parse(s.check_content);
+            const testResults = clone.querySelector(".testResults");
+            r.testResults[0].assertionResults.forEach(a => {
+              const testResult = document.createElement("li");
+              testResult.innerHTML = `${a.title} <span class="${a.status}">${a.status}</span>`;
+              testResults.appendChild(testResult);
+            })
+          }
+          catch (e) {
+
+          }
+        }
+
         submissionsContainer.appendChild(clone);
     })
 }

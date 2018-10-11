@@ -4,6 +4,7 @@ services:
     volumes:
       - ./dist:/app/dist
       - ./public:/app/public
+      - ./assignments_tests:/app/assignments_tests
   db:
     ports:
       - "5433:5432"

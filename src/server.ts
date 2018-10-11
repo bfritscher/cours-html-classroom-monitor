@@ -6,6 +6,7 @@ import Sequelize from "sequelize";
 import { dbReady, Submission } from "./db";
 
 import User from "./User";
+import { starTest } from "./validation";
 
 
 pg.defaults.parseInt8 = true
@@ -85,13 +86,15 @@ app.post(
     if (req.user.isAdmin && req.body.batch.length > 0) {
       req.body.batch.split("\n").forEach((entry: string) => {
         const [email, url] = entry.split(",");
-        Submission.upsert({
-          assignment: req.body.assignment,
+        const assignment = req.body.assignment;
+        const data = {
+          assignment,
           email,
           url
-        }).then(
+        };
+        Submission.upsert(data).then(
           () => {
-            // TODO: queue parsing
+            starTest(data);
           },
           () => {
             // TODO: handle unique constraints
@@ -109,9 +112,9 @@ app.post(
       instance
         .validate()
         .then(() => {
-          return Submission.upsert(data).then(created => {
+          return Submission.upsert(data).then(async created => {
+            await starTest(data);
             res.sendStatus(200);
-            // TODO: queue parsing
           });
         })
         .catch(() => {
@@ -120,6 +123,10 @@ app.post(
     }
   }
 );
+
+/*
+TODO: force update all of assignment if admin
+*/
 
 app.post("/api/update", (req: express.Request, res: express.Response) => {
   /*
@@ -134,16 +141,6 @@ app.post("/api/update", (req: express.Request, res: express.Response) => {
     */
 });
 
-/*
--> trigger queue
--> run process jest passing url via env variable?
--> collect json result
--> update db
-
-display listing with pictures & eval
-
-force update all of assignment if admin
-*/
 dbReady.then(() => {
   console.log("sequelize synced");
 });
