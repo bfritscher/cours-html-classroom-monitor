@@ -2,12 +2,19 @@ version: '3'
 services:
   web:
     build: .
-    ports:
-      - "8080:80"
     env_file: .env
     depends_on:
       - db
     restart: always
+    labels:
+      - "traefik.frontend.rule=Host:html.bf0.ch" # traefik will request SSL from letsencrypt
+      - "traefik.port=80" # enable this port in so traefik can proxy it
+      - "traefik.enable=true"
+      - "traefik.docker.network=web"
+      - "traefik.backend=classroom-html-monitor"
+    networks:
+      - web
+      - default
   db:
     image: postgres:9.6
     env_file: .env
@@ -17,3 +24,6 @@ services:
 volumes:
    db-data:
      driver: local
+networks:
+  web:
+    external: true
