@@ -6,14 +6,9 @@ RUN apt-get update && apt-get install -y unzip fontconfig locales gconf-service 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN mkdir -p /app
-COPY package.json /app/package.json
-
+COPY . /app
 WORKDIR /app
-RUN npm install --production
-COPY jest-setup.js /app/jest-setup.js
-COPY jest-puppeteer.config.js /app/jest-puppeteer.config.js
-COPY /dist /app/dist
-COPY /public /app/public
-COPY /assignments_tests /app/assignments_tests
+RUN npm install
+RUN npm run build-ts
 # Define default command.
 CMD ["node", "dist/server.js"]
