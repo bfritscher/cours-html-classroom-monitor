@@ -61,7 +61,7 @@ app.post(
       where: {}
     };
     if (!req.user.isAdmin) {
-      query.where.user = req.user.email;
+      query.where.email = req.user.email;
     }
     if (req.body.assignment) {
       query.where.assignment = req.body.assignment;
@@ -73,7 +73,8 @@ app.post(
     }
     Submission.findAll(query).then(submissions => {
       res.json(submissions);
-    }, () => {
+    }, (e) => {
+      console.log("query error", e);
       res.sendStatus(500);
     });
   }

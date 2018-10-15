@@ -17,7 +17,7 @@ function saveResult(task: any) {
   try {
     resultObj = JSON.parse(task.result);
   } catch (e) {
-      console.log(e);
+      console.log("Unable to parse result", e);
   }
   return Submission.update(
     {
@@ -49,7 +49,8 @@ function spawnTestProcess(task: any, cb: (error: any, result: any) => void) {
       env: {
         TestURL: task.url,
         TestUser: task.email
-      }
+      },
+      shell: true
     }
   );
   test.stdout.on("data", data => {
