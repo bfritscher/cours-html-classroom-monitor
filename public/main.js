@@ -151,7 +151,7 @@ function renderSubmissions(submissions) {
     if (s.nb) {
       clone.querySelector(".title").innerHTML = `${s.assignment} (${s.nb})`;
     } else {
-      clone.querySelector(".title").innerHTML = `${s.email} ${s.check_date}`;
+      clone.querySelector(".title").innerHTML = `${s.email} ${new Date(s.check_date).toLocaleString()}`;
       if (s.check_status) {
         clone.querySelector(".status").innerHTML = `${s.check_status}%`;
         clone.querySelector(".preview").src = `screenshots/${s.assignment}/${
