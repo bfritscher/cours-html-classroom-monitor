@@ -33,6 +33,7 @@
     "globals": {
         "page": false,
         "validateHTMLcurrentPage": false,
+        "validateCSScurrentPage": false,
         "getInnerText": false,
         "removeRemixButton": false
     }
