@@ -101,7 +101,7 @@ function submitForm() {
 }
 
 function assignmentChanged() {
-    getSubmissions()
+    getSubmissions();
     renderAssignment();
 }
 
@@ -113,9 +113,13 @@ function renderUser(user) {
     let userLabel = `${user.firstname} ${user.lastname}`;
     if (user.isAdmin) {
         userLabel += ' 🌟';
-        document.body.classList.add("admin")
+        document.body.classList.add("admin");
     }
-    document.getElementById("user").innerText = userLabel;
+    const userDisplay = document.getElementById("user");
+    userDisplay.innerText = userLabel;
+    userDisplay.onclick = () => {
+      document.body.classList.toggle("admin");
+    }
 }
 
 function renderAssignment() {
