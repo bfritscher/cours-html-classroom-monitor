@@ -23,7 +23,7 @@ function saveResult(task: any) {
     {
       check_content: task.result, // TODO: improve maybe filter to not reveal test source code?
       check_status: String(
-        (resultObj.numPassedTests / resultObj.numTotalTests) * 100
+        Math.round((resultObj.numPassedTests / resultObj.numTotalTests) * 100)
       ),
       check_date: new Date()
     },
