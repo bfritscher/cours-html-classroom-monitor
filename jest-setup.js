@@ -19,19 +19,12 @@ global.getValidationJSON = (url) => {
     },
     json: true
   });
-}
+};
 
 global.validateHTMLcurrentPage = () => {
   it("Aucune erreur de validation HTML", async () => {
     const results = await global.getValidationJSON(page.url());
-    expect(results.messages.length).toBe(0);
-  });
-};
-
-global.validateHTML = url => {
-  it("Aucune erreur de validation HTML", async () => {
-    const results = await global.getValidationJSON(url);
-    expect(results.messages.length).toBe(0);
+    expect(results.messages.length).toHaveLength(0);
   });
 };
 
@@ -46,11 +39,11 @@ global.getInnerText = selector => {
 };
 
 global.removeRemixButton = async () => {
-  await page.waitFor('.details-bar.cleanslate');
+  await page.waitFor(".details-bar.cleanslate");
   return page.evaluate(() => {
     const remix = document.querySelector(".details-bar.cleanslate");
     if (remix) {
       remix.remove();
     }
   });
-}
+};
