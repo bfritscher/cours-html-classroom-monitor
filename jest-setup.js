@@ -6,7 +6,6 @@ const request = require("request-promise-native");
 
 
 global.getValidationJSON = (url) => {
-  console.log(url);
   return request({
     uri: "https://validator.w3.org/nu/",
     headers: {
@@ -46,7 +45,8 @@ global.getInnerText = selector => {
   }, selector);
 };
 
-global.removeRemix = () => {
+global.removeRemixButton = async () => {
+  await page.waitFor('.details-bar.cleanslate');
   return page.evaluate(() => {
     const remix = document.querySelector(".details-bar.cleanslate");
     if (remix) {

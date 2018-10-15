@@ -1,8 +1,7 @@
 describe("Exercice01", () => {
   beforeAll(async () => {
     await page.goto(process.env.TestURL);
-    // remove remix button
-    await removeRemix();
+    await removeRemixButton();
     await page.screenshot({
       path: `./public/screenshots/exercice01/${process.env.TestUser}.png`,
       fullPage: true,
