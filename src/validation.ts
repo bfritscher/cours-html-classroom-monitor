@@ -43,14 +43,14 @@ function spawnTestProcess(task: any, cb: (error: any, result: any) => void) {
   }
   let result = "";
   const test = spawn(
-    "/usr/local/bin/node",
+    "node",
     ["node_modules/jest/bin/jest.js", task.assignment, "--json"],
     {
       env: {
+        ...process.env,
         TestURL: task.url,
         TestUser: task.email
       },
-      shell: true
     }
   );
   test.stdout.on("data", data => {
