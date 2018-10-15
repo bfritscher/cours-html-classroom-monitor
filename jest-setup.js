@@ -24,7 +24,7 @@ global.getValidationJSON = (url) => {
 global.validateHTMLcurrentPage = () => {
   it("Aucune erreur de validation HTML", async () => {
     const results = await global.getValidationJSON(page.url());
-    expect(results.messages.length).toHaveLength(0);
+    expect(results.messages.length).toStrictEqual(0);
   });
 };
 
