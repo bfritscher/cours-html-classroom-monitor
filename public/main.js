@@ -10,8 +10,8 @@ function init() {
   } else {
     const assignment = localStorage.getItem(ASSIGNMENT_KEY);
     localStorage.removeItem(ASSIGNMENT_KEY);
-    if(assignment && assignment !== getAssignmentNameFromHash()) {
-        setAssignment(assignment);
+    if (assignment && assignment !== getAssignmentNameFromHash()) {
+      setAssignment(assignment);
     }
     verifyToken();
   }
@@ -24,12 +24,13 @@ function init() {
 function login() {
   localStorage.removeItem(JWT_KEY);
   localStorage.setItem(ASSIGNMENT_KEY, getAssignmentNameFromHash());
-  window.location =
-    `https://marmix.ig.he-arc.ch/shibjwt/?reply_to=${location.origin}/api/login`;
+  window.location = `https://marmix.ig.he-arc.ch/shibjwt/?reply_to=${
+    location.origin
+  }/api/login`;
 }
 
 function setAssignment(assignment) {
-    window.location.hash = assignment;
+  window.location.hash = assignment;
 }
 
 function verifyToken() {
@@ -51,29 +52,30 @@ function verifyToken() {
 }
 
 function getSubmissions() {
-    fetch("api/submissions", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ jwt, assignment: getAssignmentNameFromHash() })
+  fetch("api/submissions", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ jwt, assignment: getAssignmentNameFromHash() })
+  })
+    .then(res => {
+      if (res.status === 403) {
+        return login();
+      }
+      return res.json();
     })
-      .then(res => {
-        if (res.status === 403) {
-          return login();
-        }
-        return res.json();
-      })
-      .then(renderSubmissions);
-  }
+    .then(renderSubmissions);
+}
 
+// eslint-disable-next-line
 function submitForm() {
-    const sendButton = document.getElementById("send");
-    toastSuccess.style.display = "none";
-    toastError.style.display = "none";
-    renderSubmissions([]);
-    sendButton.disabled = true;
+  const sendButton = document.getElementById("send");
+  toastSuccess.style.display = "none";
+  toastError.style.display = "none";
+  renderSubmissions([]);
+  sendButton.disabled = true;
   fetch("api/submit", {
     method: "POST",
     headers: {
@@ -89,11 +91,11 @@ function submitForm() {
   }).then(res => {
     sendButton.disabled = false;
     if (res.status === 403) {
-        login();
+      login();
     } else if (res.status === 500) {
-        toastError.style.display = "block";
+      toastError.style.display = "block";
     } else {
-        getSubmissions();
+      getSubmissions();
     }
   });
 
@@ -101,74 +103,81 @@ function submitForm() {
 }
 
 function assignmentChanged() {
-    getSubmissions();
-    renderAssignment();
+  getSubmissions();
+  renderAssignment();
 }
 
 function getAssignmentNameFromHash() {
-    return window.location.hash.slice(1);
+  return window.location.hash.slice(1);
 }
 
 function renderUser(user) {
-    let userLabel = `${user.firstname} ${user.lastname}`;
-    if (user.isAdmin) {
-        userLabel += ' 🌟';
-        document.body.classList.add("admin");
-    }
-    const userDisplay = document.getElementById("user");
-    userDisplay.innerText = userLabel;
-    userDisplay.onclick = () => {
-      document.body.classList.toggle("admin");
-    }
+  let userLabel = `${user.firstname} ${user.lastname}`;
+  if (user.isAdmin) {
+    userLabel += " 🌟";
+    document.body.classList.add("admin");
+  }
+  const userDisplay = document.getElementById("user");
+  userDisplay.innerText = userLabel;
+  userDisplay.onclick = () => {
+    document.body.classList.toggle("admin");
+  };
 }
 
 function renderAssignment() {
-    const assignment = getAssignmentNameFromHash();
-    document.getElementById("assignment").innerText = assignment;
-    document.body.classList.toggle("assignment", assignment !== "");
+  const assignment = getAssignmentNameFromHash();
+  document.getElementById("assignment").innerText = assignment;
+  document.body.classList.toggle("assignment", assignment !== "");
 }
 
-
 function renderSubmissions(submissions) {
-    const submissionsContainer = document.getElementById("submissions");
-    while (submissionsContainer.firstChild) {
-        submissionsContainer.removeChild(submissionsContainer.firstChild);
+  const submissionsContainer = document.getElementById("submissions");
+  while (submissionsContainer.firstChild) {
+    submissionsContainer.removeChild(submissionsContainer.firstChild);
+  }
+  const submissionTemplate = document.getElementById("submission-template");
+  submissions.forEach(s => {
+    // prefill current url
+    document.getElementById("url").value = s.url;
+    const clone = document.importNode(submissionTemplate.content, true)
+      .firstElementChild;
+    clone.addEventListener(
+      "click",
+      () => {
+        setAssignment(s.assignment);
+      },
+      false
+    );
+    if (s.nb) {
+      clone.querySelector(".title").innerHTML = `${s.assignment} (${s.nb})`;
+    } else {
+      clone.querySelector(".title").innerHTML = `${s.email} ${s.check_date}`;
+      if (s.check_status) {
+        clone.querySelector(".status").innerHTML = `${s.check_status}%`;
+        clone.querySelector(".preview").src = `screenshots/${s.assignment}/${
+          s.email
+        }.png?${new Date().getTime()}`;
+      }
     }
-    const submissionTemplate = document.getElementById("submission-template");
-    submissions.forEach((s) => {
-        // prefill current url
-        document.getElementById("url").value = s.url;
-        const clone = document.importNode(submissionTemplate.content, true).firstElementChild;
-        clone.addEventListener("click", () => {
-            setAssignment(s.assignment);
-        }, false);
-        if (s.nb) {
-          clone.querySelector(".title").innerHTML = `${s.assignment} (${s.nb})`;
-        } else {
-          clone.querySelector(".title").innerHTML = `${s.email} ${s.check_date}`;
-          if(s.check_status) {
-            clone.querySelector(".status").innerHTML = `${s.check_status}%`;
-            clone.querySelector(".preview").src = `screenshots/${s.assignment}/${s.email}.png?${new Date().getTime()}`;
-          }
-        }
 
-        if (s.check_content) {
-          try {
-            const r = JSON.parse(s.check_content);
-            const testResults = clone.querySelector(".testResults");
-            r.testResults[0].assertionResults.forEach(a => {
-              const testResult = document.createElement("li");
-              testResult.innerHTML = `${a.title} <span class="${a.status}">${a.status}</span>`;
-              testResults.appendChild(testResult);
-            })
-          }
-          catch (e) {
+    if (s.check_content) {
+      try {
+        const r = JSON.parse(s.check_content);
+        const testResults = clone.querySelector(".testResults");
+        r.testResults[0].assertionResults.forEach(a => {
+          const testResult = document.createElement("li");
+          testResult.innerHTML = `${a.title} <span class="${a.status}">${
+            a.status
+          }</span>`;
+          testResults.appendChild(testResult);
+        });
+        // eslint-disable-next-line
+      } catch (e) {
+      }
+    }
 
-          }
-        }
-
-        submissionsContainer.appendChild(clone);
-    })
+    submissionsContainer.appendChild(clone);
+  });
 }
 
 window.onload = init;
