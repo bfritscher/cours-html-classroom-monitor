@@ -4,8 +4,7 @@ const { toMatchImageSnapshot } = require("jest-image-snapshot");
 expect.extend({ toMatchImageSnapshot });
 const request = require("request-promise-native");
 
-
-global.getValidationJSON = (url) => {
+global.getValidationJSON = url => {
   return request({
     uri: "https://validator.w3.org/nu/",
     headers: {
@@ -28,7 +27,7 @@ global.validateHTMLcurrentPage = () => {
   });
 };
 
-global.getCSSValidation = (url) => {
+global.getCSSValidation = url => {
   return request({
     uri: "https://jigsaw.w3.org/css-validator/validator",
     headers: {
@@ -64,6 +63,16 @@ global.getInnerText = selector => {
     }
     return "";
   }, selector);
+};
+
+global.getCSSPropertyValues = (selector, ...cssList) => {
+  return page.evaluate((selector, cssList) => {
+    const domCSS = window.getComputedStyle(document.querySelector(selector));
+    return cssList.reduce((r, propName) => {
+      r[propName] = domCSS.getPropertyValue(propName);
+      return r;
+    }, {});
+  }, selector, cssList);
 };
 
 global.removeRemixButton = async () => {
