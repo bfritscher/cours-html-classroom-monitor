@@ -136,6 +136,18 @@ function renderSubmissions(submissions) {
     submissionsContainer.removeChild(submissionsContainer.firstChild);
   }
   const submissionTemplate = document.getElementById("submission-template");
+  submissions.sort((a, b) => {
+    let order;
+    if (a.hasOwnProperty("check_status") && b.hasOwnProperty("check_status")) {
+      order = parseInt(a.check_status) - parseInt(b.check_status);
+      if (order === 0) {
+        order = a.email.localeCompare(b.email);
+      }
+    } else {
+      order = a.assignment.localeCompare(b.assignment);
+    }
+    return order;
+  });
   submissions.forEach(s => {
     // prefill current url
     document.getElementById("url").value = s.url;
@@ -149,6 +161,7 @@ function renderSubmissions(submissions) {
       false
     );
     if (s.nb) {
+      if (!s.assignment.includes("exercice")) return;
       clone.querySelector(".title").innerHTML = `${s.assignment} (${s.nb})`;
     } else {
       clone.querySelector(".title").innerHTML = `${s.email} ${new Date(s.check_date).toLocaleString()}`;
