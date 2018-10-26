@@ -36,7 +36,7 @@ describe("Exercice02", () => {
         ol => ol.children.length
       )
     );
-    expect(texts).toEqual([10, 2, 8]);
+    expect(texts).toEqual([9, 2, 8]);
   });
 
   it("Liens source", async () => {
