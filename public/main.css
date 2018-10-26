@@ -36,3 +36,28 @@ h2 {
     float: right;
     width: 50%;
 }
+
+body.admin #submissions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+body.admin .testResults {
+ display: none;
+}
+
+body.admin .submission {
+    width: 300px;
+    margin: 20px;
+}
+
+body.admin .submission h3{
+    font-size: 14pt;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+body.admin .submission .preview {
+    width: 100%;
+}
