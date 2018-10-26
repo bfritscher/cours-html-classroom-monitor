@@ -179,7 +179,7 @@ function renderSubmissions(submissions) {
         const testResults = clone.querySelector(".testResults");
         r.testResults[0].assertionResults.forEach(a => {
           const testResult = document.createElement("li");
-          testResult.innerHTML = `${a.title} <span class="${a.status}">${
+          testResult.innerHTML = `${a.title} <span title="${a.failureMessages.pop() || ""}" class="${a.status}">${
             a.status
           }</span>`;
           testResults.appendChild(testResult);
