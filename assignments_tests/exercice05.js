@@ -101,6 +101,10 @@ describe("Exercice05", () => {
     const image = await page.screenshot({
       fullPage: true
     });
-    expect(image).toMatchImageSnapshot();
+    // font rendering not the same allow small difference
+    expect(image).toMatchImageSnapshot({
+      failureThreshold: "0.04",
+      failureThresholdType: "percent"
+    });
   });
 });
