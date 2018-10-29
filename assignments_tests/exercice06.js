@@ -45,6 +45,9 @@ describe("Exercice06", () => {
       fullPage: true
     });
     // font rendering not the same allow small difference
-    expect(image).toMatchImageSnapshot();
+    expect(image).toMatchImageSnapshot({
+      failureThreshold: "0.02",
+      failureThresholdType: "percent"
+    });
   });
 });
