@@ -70,7 +70,8 @@ function spawnTestProcess(task: any, cb: (error: any, result: any) => void) {
 const testQueue = new Queue(spawnTestProcess, {
   id: (task: IData, cb: any) => {
     cb(null, `${task.assignment}_${task.email}`);
-  }
+  },
+  concurrent: process.env.QUEUE_CONCCURENT || 1
 });
 
 interface IData {
