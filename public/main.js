@@ -179,10 +179,16 @@ function renderSubmissions(submissions) {
         const testResults = clone.querySelector(".testResults");
         r.testResults[0].assertionResults.forEach(a => {
           const testResult = document.createElement("li");
-          testResult.innerHTML = `${a.title} <span title="${a.failureMessages.pop() || ""}" class="${a.status}">${
+          const errorMessage = a.failureMessages.pop() || "";
+          testResult.innerHTML = `${a.title} <span title="${errorMessage}" class="${a.status}">${
             a.status
           }</span>`;
           testResults.appendChild(testResult);
+          const regex = /public\/(screenshots.*?\.png)/gm;
+          const match = regex.exec(errorMessage);
+          if (match) {
+            clone.querySelector(".preview").src = match[1];
+          }
         });
         // eslint-disable-next-line
       } catch (e) {

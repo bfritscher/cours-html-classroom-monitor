@@ -34,6 +34,7 @@
         "page": false,
         "validateHTMLcurrentPage": false,
         "validateCSScurrentPage": false,
+        "compareImage": false,
         "getInnerText": false,
         "removeRemixButton": false,
         "getCSSPropertyValues": false

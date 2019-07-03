@@ -97,14 +97,7 @@ describe("Exercice05", () => {
     expect(css["vertical-align"]).toBe("bottom");
   });
 
-  it("Apparence est la même", async () => {
-    const image = await page.screenshot({
-      fullPage: true
-    });
-    // font rendering not the same allow small difference
-    expect(image).toMatchImageSnapshot({
-      failureThreshold: "0.04",
-      failureThresholdType: "percent"
-    });
+  compareImage({
+    customSnapshotIdentifier: "exercice05"
   });
 });

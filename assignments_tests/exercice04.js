@@ -9,13 +9,9 @@ describe("Exercice04", () => {
   });
 
   validateHTMLcurrentPage();
-
   validateCSScurrentPage();
-
-  it("Apparence est la même", async () => {
-    const image = await page.screenshot({
-      fullPage: true
-    });
-    expect(image).toMatchImageSnapshot();
+  compareImage({
+    customSnapshotIdentifier: "exercice04"
   });
 });
+

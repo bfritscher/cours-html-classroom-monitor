@@ -84,3 +84,17 @@ global.removeRemixButton = async () => {
     }
   });
 };
+
+global.compareImage = (options = {}) => {
+  it("Apparence est la même", async () => {
+    const image = await page.screenshot({
+      fullPage: true
+    });
+    options = Object.assign({
+      customDiffDir: `./public/screenshots/${options.customSnapshotIdentifier}/${process.env.TestUser}`,
+      failureThreshold: "0.04",
+      failureThresholdType: "percent"
+    }, options);
+    expect(image).toMatchImageSnapshot(options);
+  });
+};

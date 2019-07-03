@@ -40,14 +40,7 @@ describe("Exercice06", () => {
   });
 
 
-  it("Apparence est la même", async () => {
-    const image = await page.screenshot({
-      fullPage: true
-    });
-    // font rendering not the same allow small difference
-    expect(image).toMatchImageSnapshot({
-      failureThreshold: "0.02",
-      failureThresholdType: "percent"
-    });
+  compareImage({
+    customSnapshotIdentifier: "exercice06"
   });
 });
