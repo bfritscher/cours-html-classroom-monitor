@@ -17,7 +17,7 @@ function saveResult(task: any) {
   try {
     resultObj = JSON.parse(task.result);
   } catch (e) {
-      console.log("Unable to parse result", e);
+      console.log("Unable to parse result", e, task);
   }
   return Submission.update(
     {
@@ -36,7 +36,7 @@ function saveResult(task: any) {
   );
 }
 
-function spawnTestProcess(task: any, cb: (error: any, result: any) => void) {
+export function spawnTestProcess(task: any, cb: (error: any, result: any) => void) {
   const assignmentDir = `${screenshotDir}/${task.assignment}`;
   if (!fs.existsSync(assignmentDir)) {
     fs.mkdirSync(assignmentDir);
