@@ -1,6 +1,6 @@
-import Sequelize from "sequelize";
+import { Model, BuildOptions } from "sequelize";
 
-export interface SubmissionAttribute {
+export interface SubmissionModel extends Model {
   assignment: string;
   email: string;
   url: string;
@@ -9,9 +9,6 @@ export interface SubmissionAttribute {
   check_content?: string;
 }
 
-export interface SubmissionInstance
-  extends Sequelize.Instance<SubmissionAttribute>,
-    SubmissionAttribute {}
-
-export interface SubmissionModel
-  extends Sequelize.Model<SubmissionInstance, SubmissionAttribute> {}
+type SubmissionModelStatic = typeof Model & {
+  new (values?: object, options?: BuildOptions): SubmissionModel
+}

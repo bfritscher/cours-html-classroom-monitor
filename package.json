@@ -16,7 +16,7 @@
     "testMatch": [
       "**/assignments_tests/**/*.js"
     ],
-    "setupTestFrameworkScriptFile": "<rootDir>/jest-setup.js"
+    "setupFilesAfterEnv": ["<rootDir>/jest-setup.js"]
   },
   "author": "",
   "license": "ISC",
@@ -26,7 +26,6 @@
     "@types/jsonwebtoken": "^8.3.2",
     "@types/node": "^12.0.10",
     "@types/pg": "^7.4.14",
-    "@types/sequelize": "^4.28.3",
     "concurrently": "^4.1.1",
     "eslint": "^6.0.1",
     "eslint-plugin-jest": "^22.7.1",

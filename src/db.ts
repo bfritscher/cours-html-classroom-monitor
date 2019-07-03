@@ -1,5 +1,5 @@
-import { SubmissionAttribute, SubmissionInstance } from "db";
-import Sequelize from "sequelize";
+import { SubmissionModelStatic } from "db";
+import { DataTypes, Sequelize } from "sequelize";
 
 export const sequelize = new Sequelize(
   `postgres://${process.env.POSTGRES_USER}:${
@@ -7,29 +7,29 @@ export const sequelize = new Sequelize(
   }@db:5432/${process.env.POSTGRES_DB}`
 );
 
-export const Submission = sequelize.define<SubmissionInstance, SubmissionAttribute>(
+export const Submission = sequelize.define(
   "submission",
   {
-    assignment: { type: Sequelize.STRING, primaryKey: true },
-    email: { type: Sequelize.STRING, primaryKey: true },
+    assignment: { type: DataTypes.STRING, primaryKey: true },
+    email: { type: DataTypes.STRING, primaryKey: true },
     url: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       validate: {
         isUrl: true
       }
     },
     check_date: {
-      type: Sequelize.DATE,
+      type: DataTypes.DATE,
       allowNull: true,
       defaultValue: null
     },
     check_status: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: true,
       defaultValue: null
     },
     check_content: {
-      type: Sequelize.TEXT,
+      type: DataTypes.TEXT,
       allowNull: true,
       defaultValue: null
     }
@@ -45,7 +45,7 @@ export const Submission = sequelize.define<SubmissionInstance, SubmissionAttribu
       }
     ]
   }
-);
+) as SubmissionModelStatic;
 
 function ensureConnection():Promise<any> {
   return new Promise((resolve, reject) => {
