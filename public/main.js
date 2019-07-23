@@ -72,8 +72,10 @@ function getSubmissions() {
 // eslint-disable-next-line
 function submitForm() {
   const sendButton = document.getElementById("send");
+  const modal = document.getElementById("processing");
   toastSuccess.style.display = "none";
   toastError.style.display = "none";
+  modal.classList.add("active");
   renderSubmissions([]);
   sendButton.disabled = true;
   fetch("api/submit", {
@@ -90,6 +92,7 @@ function submitForm() {
     })
   }).then(res => {
     sendButton.disabled = false;
+    modal.classList.remove("active");
     if (res.status === 403) {
       login();
     } else if (res.status === 500) {
@@ -180,7 +183,7 @@ function renderSubmissions(submissions) {
         r.testResults[0].assertionResults.forEach(a => {
           const testResult = document.createElement("li");
           const errorMessage = a.failureMessages.pop() || "";
-          testResult.innerHTML = `${a.title} <span title="${errorMessage}" class="${a.status}">${
+          testResult.innerHTML = `${a.title} <span title="${errorMessage.replace(/"/g, "'")}" class="${a.status}">${
             a.status
           }</span>`;
           testResults.appendChild(testResult);
