@@ -1,9 +1,9 @@
-describe("Exercice03", () => {
+describe("Facture", () => {
   beforeAll(async () => {
     await page.goto(process.env.TestURL);
     await removeRemixButton();
     await page.screenshot({
-      path: `./public/screenshots/exercice03/${process.env.TestUser}.png`,
+      path: `./public/screenshots/facture/${process.env.TestUser}.png`,
       fullPage: true
     });
   });
@@ -12,7 +12,7 @@ describe("Exercice03", () => {
     expect(await getInnerText("caption")).toBe("Commande client");
   });
 
-  it("En-tête de la table", async () => {
+  it("En-tête du tableau", async () => {
     const texts = await page.evaluate(() =>
       [...document.querySelectorAll("table > thead > tr > th")].map(
         e => e.innerText
@@ -27,7 +27,7 @@ describe("Exercice03", () => {
     ]);
   });
 
-  it("Body de la table", async () => {
+  it("Contenu du tableau", async () => {
     const texts = await page.evaluate(() =>
       [...document.querySelectorAll("table > tbody > tr")].map(
         e => e.children.length
@@ -36,7 +36,7 @@ describe("Exercice03", () => {
     expect(texts).toEqual([5, 5, 5, 5]);
   });
 
-  it("Pied de la table", async () => {
+  it("Pied du tableau", async () => {
     const texts = await page.evaluate(() =>
       [
         ...document.querySelectorAll('table > tfoot > tr > th[colspan="4"] ')

@@ -1,12 +1,14 @@
-describe("Exercice02", () => {
+describe("Crackpie", () => {
   beforeAll(async () => {
     await page.goto(process.env.TestURL);
     await removeRemixButton();
     await page.screenshot({
-      path: `./public/screenshots/exercice02/${process.env.TestUser}.png`,
+      path: `./public/screenshots/crackpie/${process.env.TestUser}.png`,
       fullPage: true
     });
   });
+
+  validateHTMLcurrentPage();
 
   it("Titre de la page", async () => {
     expect(await getInnerText("h1")).toBe("Recette crack pie");
@@ -47,19 +49,4 @@ describe("Exercice02", () => {
     ).toBe("Elise dit à Table!");
   });
 
-  validateHTMLcurrentPage();
-
-  /*
-  it("Apparence", async () => {
-    const image = await page.screenshot({
-        fullPage: true,
-    });
-    expect(image).toMatchImageSnapshot();
-  });
-
-  it("Correct Image", async () => {
-    const image = await (await page.$('img')).screenshot();
-    expect(image).toMatchImageSnapshot();
-  });
-*/
 });
