@@ -3,6 +3,9 @@ require("expect-puppeteer");
 const { toMatchImageSnapshot } = require("jest-image-snapshot");
 expect.extend({ toMatchImageSnapshot });
 const request = require("request-promise-native");
+const crypto = require("crypto");
+
+global.hash = (str) => crypto.createHash("sha256").update(str).digest("hex");
 
 global.getValidationJSON = url => {
   return request({
@@ -65,6 +68,16 @@ global.getInnerText = selector => {
   }, selector);
 };
 
+global.getAttribute = (selector, attribute) => {
+  return page.evaluate((selector, attribute) => {
+    const el = document.querySelector(selector);
+    if (el) {
+      return el.getAttribute(attribute);
+    }
+    return "";
+  }, selector, attribute);
+};
+
 global.getCSSPropertyValues = (selector, ...cssList) => {
   return page.evaluate((selector, cssList) => {
     const domCSS = window.getComputedStyle(document.querySelector(selector));
@@ -73,16 +86,6 @@ global.getCSSPropertyValues = (selector, ...cssList) => {
       return r;
     }, {});
   }, selector, cssList);
-};
-
-global.removeRemixButton = async () => {
-  await page.waitFor(".details-bar.cleanslate");
-  return page.evaluate(() => {
-    const remix = document.querySelector(".details-bar.cleanslate");
-    if (remix) {
-      remix.remove();
-    }
-  });
 };
 
 global.compareImage = (options = {}) => {

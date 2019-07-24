@@ -36,8 +36,9 @@
         "validateCSScurrentPage": false,
         "compareImage": false,
         "getInnerText": false,
-        "removeRemixButton": false,
-        "getCSSPropertyValues": false
+        "getCSSPropertyValues": false,
+        "getAttribute": false,
+        "hash": false
     }
 
 }

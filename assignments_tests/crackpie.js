@@ -1,7 +1,6 @@
 describe("Crackpie", () => {
   beforeAll(async () => {
     await page.goto(process.env.TestURL);
-    await removeRemixButton();
     await page.screenshot({
       path: `./public/screenshots/crackpie/${process.env.TestUser}.png`,
       fullPage: true

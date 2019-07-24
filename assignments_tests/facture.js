@@ -1,7 +1,6 @@
 describe("Facture", () => {
   beforeAll(async () => {
     await page.goto(process.env.TestURL);
-    await removeRemixButton();
     await page.screenshot({
       path: `./public/screenshots/facture/${process.env.TestUser}.png`,
       fullPage: true

@@ -1,9 +1,8 @@
-describe("Exercice06", () => {
+describe("Ski Club", () => {
   beforeAll(async () => {
     await page.goto(process.env.TestURL);
-    await removeRemixButton();
     await page.screenshot({
-      path: `./public/screenshots/exercice06/${process.env.TestUser}.png`,
+      path: `./public/screenshots/skiclub/${process.env.TestUser}.png`,
       fullPage: true
     });
   });
@@ -21,7 +20,9 @@ describe("Exercice06", () => {
       const form = document.querySelector("form");
       return form.getAttributeNames().map(n => form.getAttribute(n));
     });
-    expect(texts).toEqual(["https://hec.unil.ch/info1ere/echo/", "post", "multipart/form-data"]);
+    expect(texts).toContain("https://hec.unil.ch/info1ere/echo/");
+    expect(texts).toContain("post");
+    expect(texts).toContain("multipart/form-data");
   });
 
   it("Sections du formulaire", async () => {
@@ -39,8 +40,7 @@ describe("Exercice06", () => {
     expect(texts).toEqual(["email", "mdp1", "mdp2", "type", "nom", "prenom", "photo", "ski_piste", "ski_rando", "apero", "deja_skiclub", "deja_skiclub", "commentaire"]);
   });
 
-
   compareImage({
-    customSnapshotIdentifier: "exercice06"
+    customSnapshotIdentifier: "skiclub"
   });
 });
