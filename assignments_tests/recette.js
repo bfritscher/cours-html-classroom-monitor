@@ -1,9 +1,8 @@
-describe("Exercice04", () => {
+describe("Recette", () => {
   beforeAll(async () => {
     await page.goto(process.env.TestURL);
-    await removeRemixButton();
     await page.screenshot({
-      path: `./public/screenshots/exercice04/${process.env.TestUser}.png`,
+      path: `./public/screenshots/recette/${process.env.TestUser}.png`,
       fullPage: true
     });
   });
@@ -11,7 +10,7 @@ describe("Exercice04", () => {
   validateHTMLcurrentPage();
   validateCSScurrentPage();
   compareImage({
-    customSnapshotIdentifier: "exercice04"
+    customSnapshotIdentifier: "recette"
   });
 });
 
