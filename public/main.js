@@ -164,7 +164,6 @@ function renderSubmissions(submissions) {
       false
     );
     if (s.nb) {
-      if (!s.assignment.includes("exercice")) return;
       clone.querySelector(".title").innerHTML = `${s.assignment} (${s.nb})`;
     } else {
       clone.querySelector(".title").innerHTML = `${s.email} ${new Date(s.check_date).toLocaleString()}`;
