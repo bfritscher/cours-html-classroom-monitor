@@ -38,7 +38,8 @@
         "getInnerText": false,
         "getCSSPropertyValues": false,
         "getAttribute": false,
-        "hash": false
+        "hash": false,
+        "Chartist": false
     }
 
 }

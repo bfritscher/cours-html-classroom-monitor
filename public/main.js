@@ -138,6 +138,11 @@ function renderSubmissions(submissions) {
   while (submissionsContainer.firstChild) {
     submissionsContainer.removeChild(submissionsContainer.firstChild);
   }
+  const submissionsChartContainer = document.getElementById("submissions-chart");
+  while (submissionsChartContainer.firstChild) {
+    submissionsChartContainer.removeChild(submissionsChartContainer.firstChild);
+  }
+
   const submissionTemplate = document.getElementById("submission-template");
   submissions.sort((a, b) => {
     let order;
@@ -151,6 +156,22 @@ function renderSubmissions(submissions) {
     }
     return order;
   });
+  const data = submissions.filter(s => s.check_status).reduce((data, s) => {
+    const idx = data.labels.indexOf(s.check_status);
+    if(idx === -1) {
+      data.labels.push(s.check_status);
+      data.series[0].push(1);
+    } else {
+      data.series[0][idx]++;
+    }
+    return data;
+  }, {labels: [], series: [[]]});
+  new Chartist.Bar("#submissions-chart", data, {
+    axisY: {
+      onlyInteger: true
+    }
+  });
+
   submissions.forEach(s => {
     // prefill current url
     document.getElementById("url").value = s.url;
