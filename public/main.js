@@ -210,7 +210,7 @@ function renderSubmissions(submissions) {
           const regex = /public\/(screenshots.*?\.png)/gm;
           const match = regex.exec(errorMessage);
           if (match) {
-            clone.querySelector(".preview").src = match[1];
+            clone.querySelector(".preview").src = match[1] + `?${new Date().getTime()}`;
           }
         });
         // eslint-disable-next-line
