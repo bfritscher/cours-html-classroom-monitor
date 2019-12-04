@@ -1,7 +1,8 @@
 describe("Ski Club", () => {
+  let image;
   beforeAll(async () => {
-    await page.goto(process.env.TestURL);
-    await page.screenshot({
+    await page.goto(process.env.TestURL, {waitUntil : "networkidle0" });
+    image = await page.screenshot({
       path: `./public/screenshots/skiclub/${process.env.TestUser}.png`,
       fullPage: true
     });
@@ -32,15 +33,23 @@ describe("Ski Club", () => {
     expect(texts).toEqual(["Données personnelles", "Statistiques: SwissSki", "Commentaires"]);
   });
 
-  // p label name
-  it("Elements du formulaire", async () => {
+  it("Nom des élements du formulaire", async () => {
     const texts = await page.evaluate(() =>
-      [...document.querySelectorAll("p label input, p label select, textarea")].map(e => e.getAttribute("name"))
+      [...document.querySelectorAll("input, select, textarea")].map(e => e.getAttribute("name")).slice(0, 14)
     );
-    expect(texts).toEqual(["email", "mdp1", "mdp2", "type", "nom", "prenom", "photo", "ski_piste", "ski_rando", "apero", "deja_skiclub", "deja_skiclub", "commentaire"]);
+    expect(texts).toEqual(["email", "mdp1", "mdp2", "type", "nom", "prenom", "photo", "ski_piste", "ski_rando", "apero", "deja_skiclub", "deja_skiclub", "autre_skiclub", "commentaire"]);
+  });
+
+  // p label name
+  it("Elements du formulaire dans un p et une légende", async () => {
+    const texts = await page.evaluate(() =>
+      [...document.querySelectorAll("p label input, p label select")].map(e => e.getAttribute("name"))
+    );
+    expect(texts).toEqual(["email", "mdp1", "mdp2", "type", "nom", "prenom", "photo", "ski_piste", "ski_rando", "apero", "deja_skiclub", "deja_skiclub"]);
   });
 
   compareImage({
-    customSnapshotIdentifier: "skiclub"
-  });
+    customSnapshotIdentifier: "skiclub",
+  },
+  image);
 });
