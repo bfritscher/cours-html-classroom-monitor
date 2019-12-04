@@ -46,6 +46,6 @@
     "pg-hstore": "^2.3.3",
     "puppeteer": "^2.0.0",
     "request": "^2.88.0",
-    "sequelize": "^5.21.2"
+    "sequelize": "^5.15.1"
   }
 }
