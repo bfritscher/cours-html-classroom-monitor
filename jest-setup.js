@@ -1,5 +1,5 @@
 require("expect-puppeteer");
-jest.setTimeout(30000)
+jest.setTimeout(30000);
 
 const { toMatchImageSnapshot } = require("jest-image-snapshot");
 expect.extend({ toMatchImageSnapshot });
@@ -89,11 +89,13 @@ global.getCSSPropertyValues = (selector, ...cssList) => {
   }, selector, cssList);
 };
 
-global.compareImage = (options = {}) => {
+global.compareImage = (options = {}, image = null) => {
   it("Apparence est la même", async () => {
-    const image = await page.screenshot({
-      fullPage: true
-    });
+    if(!image) {
+      image = await page.screenshot({
+        fullPage: true
+      });
+    }
     options = Object.assign({
       customDiffDir: `./public/screenshots/${options.customSnapshotIdentifier}/${process.env.TestUser}`,
       failureThreshold: "0.04",
