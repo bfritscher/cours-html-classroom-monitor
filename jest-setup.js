@@ -1,4 +1,5 @@
 require("expect-puppeteer");
+jest.setTimeout(30000)
 
 const { toMatchImageSnapshot } = require("jest-image-snapshot");
 expect.extend({ toMatchImageSnapshot });
