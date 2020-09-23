@@ -104,3 +104,13 @@ global.compareImage = (options = {}, image = null) => {
     expect(image).toMatchImageSnapshot(options);
   });
 };
+
+global.removeSandboxButton = async () => {
+  await page.waitFor("iframe");
+  return page.evaluate(() => {
+    const button = document.querySelector("iframe");
+    if (button) {
+      button.remove();
+    }
+  });
+};

@@ -1,6 +1,7 @@
 describe("Biscuits", () => {
   beforeAll(async () => {
     await page.goto(process.env.TestURL);
+    await removeSandboxButton();
     await page.screenshot({
       path: `./public/screenshots/biscuits/${process.env.TestUser}.png`,
       fullPage: true

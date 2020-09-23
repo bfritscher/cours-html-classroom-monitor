@@ -39,7 +39,8 @@
         "getCSSPropertyValues": false,
         "getAttribute": false,
         "hash": false,
-        "Chartist": false
+        "Chartist": false,
+        "removeSandboxButton": false
     }
 
 }
