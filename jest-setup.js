@@ -92,13 +92,14 @@ global.getCSSPropertyValues = (selector, ...cssList) => {
 global.compareImage = (options = {}, image = null) => {
   it("Apparence est la même", async () => {
     if(!image) {
+      await removeSandboxButton();
       image = await page.screenshot({
         fullPage: true
       });
     }
     options = Object.assign({
       customDiffDir: `./public/screenshots/${options.customSnapshotIdentifier}/${process.env.TestUser}`,
-      failureThreshold: "0.04",
+      failureThreshold: "0.02",
       failureThresholdType: "percent"
     }, options);
     expect(image).toMatchImageSnapshot(options);
@@ -112,5 +113,6 @@ global.removeSandboxButton = async () => {
     if (button) {
       button.remove();
     }
+    return button;
   });
 };

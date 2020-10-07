@@ -1,8 +1,9 @@
 describe("Recette", () => {
+  let image;
   beforeAll(async () => {
-    await page.goto(process.env.TestURL);
+    await page.goto(process.env.TestURL, {waitUntil : "networkidle0" });
     await removeSandboxButton();
-    await page.screenshot({
+    image = await page.screenshot({
       path: `./public/screenshots/recette/${process.env.TestUser}.png`,
       fullPage: true
     });
@@ -12,6 +13,5 @@ describe("Recette", () => {
   validateCSScurrentPage();
   compareImage({
     customSnapshotIdentifier: "recette"
-  });
+  }, image);
 });
-

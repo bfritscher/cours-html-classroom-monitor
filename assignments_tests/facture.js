@@ -6,6 +6,8 @@ describe("Facture", () => {
       fullPage: true
     });
   });
+  
+  validateHTMLcurrentPage();
 
   it("Tableau possède une légende", async () => {
     expect(await getInnerText("caption")).toBe("Commande client");
@@ -44,5 +46,4 @@ describe("Facture", () => {
     expect(texts.map(e => e.trim())).toEqual(["Sous total", "Total"]);
   });
 
-  validateHTMLcurrentPage();
 });
