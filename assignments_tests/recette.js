@@ -41,7 +41,7 @@ describe("Recette", () => {
   });
 
   it("Liste sans puces", async () => {
-    const css = await getCSSPropertyValues("ul", "list-style-type");
+    const css = await getCSSPropertyValues("li", "list-style-type");
     expect(css["list-style-type"]).toEqual("none");
   });
 
