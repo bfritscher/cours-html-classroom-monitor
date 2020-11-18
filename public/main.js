@@ -188,11 +188,17 @@ function renderSubmissions(submissions) {
       clone.querySelector(".title").innerHTML = `${s.assignment} (${s.nb})`;
     } else {
       clone.querySelector(".title").innerHTML = `${s.email} ${new Date(s.check_date).toLocaleString()}`;
+
       if (s.check_status) {
         clone.querySelector(".status").innerHTML = `${s.check_status}%`;
-        clone.querySelector(".preview").src = `screenshots/${s.assignment}/${
+        const preview = clone.querySelector(".preview");
+        preview.src = `screenshots/${s.assignment}/${
           s.email
         }.png?${new Date().getTime()}`;
+
+        preview.addEventListener("click", () => {
+          window.open(s.url);
+        });
       }
     }
 
