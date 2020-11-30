@@ -99,6 +99,7 @@ describe("Biscuits", () => {
   });
 
   compareImage({
-    customSnapshotIdentifier: "biscuits"
+    customSnapshotIdentifier: "biscuits",
+    failureThreshold: "0.05"
   }, image);
 });
