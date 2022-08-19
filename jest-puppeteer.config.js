@@ -1,5 +1,6 @@
 module.exports = {
-    launch: {
-        args: ["--no-sandbox"]
-      },
-  }
+  launch: {
+    executablePath: '/usr/bin/google-chrome',
+    args: ["--no-sandbox"],
+  },
+};

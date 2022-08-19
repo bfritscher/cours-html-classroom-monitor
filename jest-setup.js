@@ -3,25 +3,14 @@ jest.setTimeout(30000);
 
 const { toMatchImageSnapshot } = require("jest-image-snapshot");
 expect.extend({ toMatchImageSnapshot });
-const request = require("request-promise-native");
+const fetch = require('node-fetch');
 const crypto = require("crypto");
 
 global.hash = (str) => crypto.createHash("sha256").update(str).digest("hex");
 
-global.getValidationJSON = url => {
-  return request({
-    uri: "https://validator.w3.org/nu/",
-    headers: {
-      "User-Agent":
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36"
-    },
-    qs: {
-      out: "json",
-      level: "error",
-      doc: url
-    },
-    json: true
-  });
+global.getValidationJSON = async url => {
+  const response = await fetch(`https://validator.w3.org/nu/?out=json&level=error&doc=${url}`);
+  return response.json();
 };
 
 global.validateHTMLcurrentPage = () => {
@@ -31,22 +20,9 @@ global.validateHTMLcurrentPage = () => {
   });
 };
 
-global.getCSSValidation = url => {
-  return request({
-    uri: "https://jigsaw.w3.org/css-validator/validator",
-    headers: {
-      "User-Agent":
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36"
-    },
-    qs: {
-      uri: url,
-      profile: "css3svg",
-      usermedium: "all",
-      warning: "no",
-      lang: "fr",
-      output: "text"
-    }
-  });
+global.getCSSValidation = async url => {
+  const response = await fetch(`https://jigsaw.w3.org/css-validator/validator?profile=css3svg&usermedium=all&warning=no&lang=fr&output=text&uri=${url}`);
+  return response.text();
 };
 
 global.validateCSScurrentPage = () => {
@@ -107,8 +83,12 @@ global.compareImage = (options = {}, image = null) => {
 };
 
 global.removeSandboxButton = async () => {
-  await page.waitFor("iframe");
+  await page.waitForSelector("iframe");
   return page.evaluate(() => {
+    const fishing = document.querySelector("iframe");
+    if (fishing) {
+      fishing.remove();
+    }
     const button = document.querySelector("iframe");
     if (button) {
       button.remove();

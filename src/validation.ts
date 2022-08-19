@@ -61,7 +61,7 @@ export function spawnTestProcess(task: any, cb: (error: any, result: any) => voi
     cb(err, null);
   });
   test.on("close", code => {
-    task.result = result;
+    task.result = result || "{}";
     saveResult(task);
     cb(null, result);
   });
@@ -80,7 +80,7 @@ interface IData {
   url: string;
 }
 export function starTest(data: IData) {
-  return new Promise((resolve, reject) => {
+  return new Promise<void>((resolve, reject) => {
     testQueue.push(data, () => {
         resolve();
     });
