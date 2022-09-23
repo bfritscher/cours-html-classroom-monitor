@@ -21,8 +21,7 @@ describe("Black White", () => {
 
   describe("black", () => {
     beforeAll(async () => {
-      await expect(page).toClick("#black");
-      await page.waitForSelector("html");
+      await page.goto(process.env.TestURL + "/black/index.html");
     });
 
     it("Black lien vers scroll est relatif", async () => {
@@ -44,8 +43,7 @@ describe("Black White", () => {
 
   describe("white", () => {
     beforeAll(async () => {
-      await expect(page).toClick("#white");
-      await page.waitForSelector("html");
+      await page.goto(process.env.TestURL + "/white/index.html");
     });
 
     it("White lien retour est absolut", async () => {
@@ -71,12 +69,7 @@ describe("Black White", () => {
   describe("scroll", () => {
     beforeAll(async () => {
       // codesanbox hooks blocks hash nav...
-      await expect(page).toClick("#retour");
-      await page.waitForSelector("html");
-      await expect(page).toClick("#black");
-      await page.waitForSelector("html");
-      await expect(page).toClick("#scroll");
-      await page.waitForSelector("html");
+      await page.goto(process.env.TestURL + "/black/scroll.html");
     });
 
     it("Scroll lien vers poisson", async () => {
