@@ -97,6 +97,10 @@ function submitForm() {
       login();
     } else if (res.status === 500) {
       toastError.style.display = "block";
+      toastError.innerText = "Error accepting your URL!";
+    } else if (res.status === 404) {
+      toastError.style.display = "block";
+      toastError.innerText = "Assignment not found!";
     } else {
       getSubmissions();
     }

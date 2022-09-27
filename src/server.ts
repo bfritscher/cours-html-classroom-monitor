@@ -2,6 +2,7 @@ import bodyParser from "body-parser";
 import express from "express";
 import pg from "pg";
 import Sequelize from "sequelize";
+import fs from "fs";
 
 import { dbReady, Submission } from "./db";
 
@@ -10,6 +11,18 @@ import { starTest } from "./validation";
 
 
 pg.defaults.parseInt8 = true
+
+const assignmentsFolder = './assignments_tests/';
+
+const availableAssignments = [];
+const fileRegex = /(.*)\.js/;
+fs.readdirSync(assignmentsFolder).forEach(file => {
+  const match = file.match(fileRegex);
+  if (match) {
+    availableAssignments.push(match[1]);
+  }
+});
+console.log('available assignments', availableAssignments);
 
 const urlencodeParser = bodyParser.urlencoded({ extended: false });
 
@@ -104,6 +117,10 @@ app.post(
       });
       res.sendStatus(200);
     } else {
+      if (availableAssignments.indexOf(req.body.assignment) === -1) {
+        res.sendStatus(404);
+        return;
+      }
       const data = {
         assignment: req.body.assignment,
         email: req.user.email,
@@ -145,4 +162,4 @@ app.post("/api/update", (req: express.Request, res: express.Response) => {
 dbReady.then(() => {
   console.log("sequelize synced");
 });
-app.listen(80, () => console.log("Example app listening on port 80!"));
+app.listen(80, () => console.log("app listening on port 80!"));
