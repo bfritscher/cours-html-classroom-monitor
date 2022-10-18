@@ -19,11 +19,13 @@ describe("Biscuits lite", () => {
   validateCSScurrentPage();
 
   // title
+  /*
    it("Page", async () => {
     const css = await getCSSPropertyValues("body", "display", "flex-direction");
     expect(css["display"]).toBe("flex");
     expect(css["flex-direction"]).toBe("column");
   });
+  */
 
   it("Menu principal avec majuscules CSS", async () => {
     const texts = await page.evaluate(() =>
