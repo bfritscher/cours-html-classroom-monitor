@@ -17,12 +17,26 @@ global.getValidationJSON = async (url) => {
 };
 
 global.validateHTMLcurrentPage = () => {
-  /*
   it("Aucune erreur de validation HTML", async () => {
-    const results = await global.getValidationJSON(page.url());
+    const pageContent = await page.content();
+    const strippedContent = pageContent
+      .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
+      .replace(/<link\b[^>]*as=["']script["'][^>]*>/gi, "");
+    console.log(strippedContent);
+    const response = await fetch(
+      "https://validator.w3.org/nu/?out=json&level=error",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "text/html; charset=utf-8",
+        },
+        body: strippedContent,
+      }
+    );
+    const results = await response.json();
+    console.log(results);
     expect(results.messages.length).toStrictEqual(0);
   });
-  */
 };
 
 global.getCSSValidation = async (url) => {
@@ -124,4 +138,3 @@ global.setSandboxCookie = async () => {
     domain: new URL(process.env.TestURL).hostname,
   });
 };
-

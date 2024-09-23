@@ -12,9 +12,10 @@ RUN apt-get update && apt-get install curl gnupg -y \
   && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /app
-COPY . /app
 WORKDIR /app
+COPY ./package.json /app
 RUN npm install
+COPY . /app
 RUN npm run build-ts
 # Define default command.
 CMD ["node", "dist/server.js"]
