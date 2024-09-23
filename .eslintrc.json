@@ -40,7 +40,8 @@
         "getAttribute": false,
         "hash": false,
         "Chartist": false,
-        "removeSandboxButton": false
+        "removeSandboxButton": false,
+        "setSandboxCookie": false
     }
 
 }
