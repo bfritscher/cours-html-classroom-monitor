@@ -6,6 +6,7 @@ describe("Biscuits lite", () => {
       height: 800,
       deviceScaleFactor: 1,
     });
+    await setSandboxCookie();
     await page.goto(process.env.TestURL, {waitUntil : "networkidle0" });
     await removeSandboxButton();
     image = await page.screenshot({

@@ -2,6 +2,7 @@ describe("Recette", () => {
   let image;
   let pageSource;
   beforeAll(async () => {
+    await setSandboxCookie();
     const response = await page.goto(process.env.TestURL, {waitUntil : "networkidle0" });
     pageSource = await response.text();
     await removeSandboxButton();

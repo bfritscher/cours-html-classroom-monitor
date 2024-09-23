@@ -1,5 +1,6 @@
 describe("Black White", () => {
   beforeAll(async () => {
+    await setSandboxCookie();
     await page.goto(process.env.TestURL);
     await page.screenshot({
       path: `./public/screenshots/blackwhite/${process.env.TestUser}.png`,

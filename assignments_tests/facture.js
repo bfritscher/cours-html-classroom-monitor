@@ -1,5 +1,6 @@
 describe("Facture", () => {
   beforeAll(async () => {
+    await setSandboxCookie();
     await page.goto(process.env.TestURL);
     await page.screenshot({
       path: `./public/screenshots/facture/${process.env.TestUser}.png`,

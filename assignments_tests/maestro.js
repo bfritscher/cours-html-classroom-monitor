@@ -1,5 +1,6 @@
 describe("Maestro", () => {
   beforeAll(async () => {
+    await setSandboxCookie();
     await page.goto(process.env.TestURL);
     await page.screenshot({
       path: `./public/screenshots/maestro/${process.env.TestUser}.png`,

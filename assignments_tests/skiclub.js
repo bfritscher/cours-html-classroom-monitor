@@ -1,6 +1,7 @@
 describe("Ski Club", () => {
   let image;
   beforeAll(async () => {
+    await setSandboxCookie();
     await page.goto(process.env.TestURL, {waitUntil : "networkidle0" });
     await removeSandboxButton();
     image = await page.screenshot({

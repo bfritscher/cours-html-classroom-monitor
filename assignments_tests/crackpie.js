@@ -8,8 +8,7 @@ describe("Crackpie", () => {
     });
   });
 
-  // wait for fix
-  // validateHTMLcurrentPage();
+  validateHTMLcurrentPage();
 
   it("Titre de la page", async () => {
     expect(await getInnerText("h1")).toBe("Recette crack pie");

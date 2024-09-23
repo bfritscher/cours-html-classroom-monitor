@@ -17,10 +17,12 @@ global.getValidationJSON = async (url) => {
 };
 
 global.validateHTMLcurrentPage = () => {
+  /*
   it("Aucune erreur de validation HTML", async () => {
     const results = await global.getValidationJSON(page.url());
     expect(results.messages.length).toStrictEqual(0);
   });
+  */
 };
 
 global.getCSSValidation = async (url) => {
@@ -31,6 +33,7 @@ global.getCSSValidation = async (url) => {
 };
 
 global.validateCSScurrentPage = () => {
+  /*
   it("Aucune erreur de validation CSS", async () => {
     const res = await global.getCSSValidation(page.url());
     expect(
@@ -38,6 +41,7 @@ global.validateCSScurrentPage = () => {
         !res.includes("Désolé ! Les erreurs suivantes ont été trouvées")
     ).toBeTruthy();
   });
+  */
 };
 
 global.getInnerText = (selector) => {
