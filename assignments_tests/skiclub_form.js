@@ -2,8 +2,7 @@ describe("Ski Club FORM", () => {
   let image;
   beforeAll(async () => {
     await setSandboxCookie();
-    await page.goto(process.env.TestURL, {waitUntil : "networkidle0" });
-    await removeSandboxButton();
+    await page.goto(process.env.TestURL);
     image = await page.screenshot({
       path: `./public/screenshots/skiclub_form/${process.env.TestUser}.png`,
       fullPage: true

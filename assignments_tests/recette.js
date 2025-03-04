@@ -3,9 +3,8 @@ describe("Recette", () => {
   let pageSource;
   beforeAll(async () => {
     await setSandboxCookie();
-    const response = await page.goto(process.env.TestURL, {waitUntil : "networkidle0" });
+    const response = await page.goto(process.env.TestURL);
     pageSource = await response.text();
-    await removeSandboxButton();
     image = await page.screenshot({
       path: `./public/screenshots/recette/${process.env.TestUser}.png`,
       fullPage: true

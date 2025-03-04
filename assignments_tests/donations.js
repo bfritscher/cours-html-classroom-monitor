@@ -1,7 +1,7 @@
 describe("Donations", () => {
   beforeAll(async () => {
     await setSandboxCookie();
-    await page.goto(process.env.TestURL, { waitUntil: "networkidle0" });
+    await page.goto(process.env.TestURL);
   });
 
   validateHTMLcurrentPage();
