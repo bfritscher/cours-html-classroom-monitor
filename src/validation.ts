@@ -71,7 +71,7 @@ const testQueue = new Queue(spawnTestProcess, {
   id: (task: IData, cb: any) => {
     cb(null, `${task.assignment}_${task.email}`);
   },
-  concurrent: process.env.QUEUE_CONCCURENT || 1
+  concurrent: process.env.QUEUE_CONCURRENT || 1
 });
 
 interface IData {

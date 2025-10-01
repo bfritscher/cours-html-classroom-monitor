@@ -1,7 +1,2 @@
-
-.env file
-  POSTGRES_USER=
-  POSTGRES_PASSWORD=
-  POSTGRES_DB=
-  JWT_SHARED_SECRET=
-  QUEUE_CONCCURENT=
+# Cours HTML Classroom Monitor
+Use puppeteer and jest to validate assignments.
