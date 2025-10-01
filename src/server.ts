@@ -31,7 +31,10 @@ async function ensureUser(
     req.user = await User.fromToken(req.body.jwt);
     next();
   } catch (e) {
-    console.log(e);
+    // if not TokenExpiredError log error
+    if (e.name !== "TokenExpiredError") {
+      console.log("ensureUser error", e);
+    }
     res.sendStatus(403);
   }
 }
