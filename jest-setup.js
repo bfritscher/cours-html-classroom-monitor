@@ -3,9 +3,7 @@ jest.setTimeout(30000);
 
 const { toMatchImageSnapshot } = require("jest-image-snapshot");
 expect.extend({ toMatchImageSnapshot });
-const fetch = require("node-fetch");
 const crypto = require("crypto");
-const { glob } = require("fs");
 
 global.hash = (str) => crypto.createHash("sha256").update(str).digest("hex");
 
