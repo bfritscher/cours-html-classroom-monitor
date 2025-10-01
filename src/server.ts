@@ -1,6 +1,5 @@
 import bodyParser from "body-parser";
 import express from "express";
-import pg from "pg";
 import Sequelize from "sequelize";
 import fs from "fs";
 
@@ -8,9 +7,6 @@ import { dbReady, Submission } from "./db";
 
 import User from "./User";
 import { starTest } from "./validation";
-
-
-pg.defaults.parseInt8 = true
 
 const assignmentsFolder = './assignments_tests/';
 

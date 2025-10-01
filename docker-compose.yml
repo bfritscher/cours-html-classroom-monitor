@@ -3,9 +3,9 @@ services:
   web:
     build: .
     env_file: .env
-    depends_on:
-      - db
     restart: always
+    volumes:
+      - db-data:/app/data
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=web"
@@ -21,13 +21,6 @@ services:
       - "traefik.http.routers.html_classroom_monitor_secured.tls.certresolver=myresolver"
     networks:
       - web
-      - default
-  db:
-    image: postgres:9.6
-    env_file: .env
-    volumes:
-      - db-data:/var/lib/postgresql/data
-    restart: always
 volumes:
    db-data:
      driver: local

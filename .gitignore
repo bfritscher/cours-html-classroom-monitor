@@ -3,3 +3,6 @@ node_modules
 dist/
 public/screenshots
 docker-compose.override.yml
+data/
+*.sqlite
+*.sqlite-journal

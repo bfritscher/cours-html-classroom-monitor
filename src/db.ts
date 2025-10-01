@@ -1,11 +1,11 @@
 import { SubmissionModelStatic } from "db";
 import { DataTypes, Sequelize } from "sequelize";
 
-export const sequelize = new Sequelize(
-  `postgres://${process.env.POSTGRES_USER}:${
-    process.env.POSTGRES_PASSWORD
-  }@db:5432/${process.env.POSTGRES_DB}`
-);
+export const sequelize = new Sequelize({
+  dialect: 'sqlite',
+  storage: process.env.SQLITE_DB_PATH || './data/database.sqlite',
+  logging: false
+});
 
 export const Submission = sequelize.define(
   "submission",
