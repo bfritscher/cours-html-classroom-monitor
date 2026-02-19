@@ -6,7 +6,7 @@ import fs from "fs";
 import { dbReady, Submission } from "./db";
 
 import User from "./User";
-import { starTest } from "./validation";
+import { getTaskQueueSnapshot, starTest } from "./validation";
 
 const assignmentsFolder = './assignments_tests/';
 
@@ -138,6 +138,18 @@ app.post(
           res.sendStatus(500);
         });
     }
+  }
+);
+
+app.post(
+  "/api/tasks",
+  ensureUser,
+  (req: express.Request, res: express.Response) => {
+    if (!req.user.isAdmin) {
+      res.sendStatus(403);
+      return;
+    }
+    res.json(getTaskQueueSnapshot());
   }
 );
 

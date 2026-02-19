@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Task Queue Monitor</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css">
+    <script src="queue.js"></script>
+</head>
+
+<body>
+    <header class="navbar">
+        <section class="navbar-section p-2">
+            <a href="/" class="navbar-brand mr-2">Classroom HTML Monitor</a>
+            <a href="/queue.html" class="btn btn-link admin-show">Task Queue</a>
+        </section>
+        <section class="navbar-section">
+            <div id="user" class="p-2"></div>
+        </section>
+    </header>
+
+    <div class="container">
+        <div class="columns">
+            <div class="column col-10 col-mx-auto">
+                <h2>Queue</h2>
+                <p id="queue-summary"></p>
+                <table class="table table-striped table-hover" id="queued-table">
+                    <thead>
+                        <tr>
+                            <th>Position</th>
+                            <th>User</th>
+                            <th>Assignment</th>
+                            <th>Waiting</th>
+                            <th>Queued At</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+
+                <h2>Running</h2>
+                <table class="table table-striped table-hover" id="running-table">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Assignment</th>
+                            <th>Wait</th>
+                            <th>Running</th>
+                            <th>Started At</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+
+                <h2>History</h2>
+                <table class="table table-striped table-hover" id="history-table">
+                    <thead>
+                        <tr>
+                            <th>Finished At</th>
+                            <th>User</th>
+                            <th>Assignment</th>
+                            <th>Status</th>
+                            <th>Exit</th>
+                            <th>Wait</th>
+                            <th>Run</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

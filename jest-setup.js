@@ -4,14 +4,34 @@ jest.setTimeout(30000);
 const { toMatchImageSnapshot } = require("jest-image-snapshot");
 expect.extend({ toMatchImageSnapshot });
 const crypto = require("crypto");
+const htmlValidatorUrl =
+  process.env.HTML_VALIDATOR_URL || "https://validator.w3.org/nu/";
 
 global.hash = (str) => crypto.createHash("sha256").update(str).digest("hex");
 
-global.getValidationJSON = async (url) => {
-  const response = await fetch(
-    `https://validator.w3.org/nu/?out=json&level=error&doc=${url}`
-  );
-  return response.json();
+global.fetchJsonWithDetails = async (url, options = {}) => {
+  const response = await fetch(url, options);
+  const body = await response.text();
+
+  if (!response.ok) {
+    throw new Error(
+      `Request failed (${response.status} ${response.statusText}) for ${url}. Response body: ${body.slice(
+        0,
+        500
+      )}`
+    );
+  }
+
+  try {
+    return JSON.parse(body);
+  } catch (error) {
+    throw new Error(
+      `Invalid JSON response (${response.status} ${response.statusText}) for ${url}. Response body: ${body.slice(
+        0,
+        500
+      )}`
+    );
+  }
 };
 
 global.validateHTMLcurrentPage = () => {
@@ -20,9 +40,8 @@ global.validateHTMLcurrentPage = () => {
     const strippedContent = pageContent
       .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
       .replace(/<link\b[^>]*as=["']script["'][^>]*>/gi, "");
-    console.log(strippedContent);
-    const response = await fetch(
-      "https://validator.w3.org/nu/?out=json&level=error",
+    const results = await global.fetchJsonWithDetails(
+      `${htmlValidatorUrl}?out=json&level=error`,
       {
         method: "POST",
         headers: {
@@ -31,29 +50,48 @@ global.validateHTMLcurrentPage = () => {
         body: strippedContent,
       }
     );
-    const results = await response.json();
-    console.log(results);
     expect(results.messages.length).toStrictEqual(0);
   });
 };
 
-global.getCSSValidation = async (url) => {
-  const response = await fetch(
-    `https://jigsaw.w3.org/css-validator/validator?profile=css3svg&usermedium=all&warning=no&lang=fr&output=text&uri=${url}`
-  );
-  return response.text();
-};
-
 global.validateCSScurrentPage = () => {
-  /*
   it("Aucune erreur de validation CSS", async () => {
-    const res = await global.getCSSValidation(page.url());
-    expect(
-      res.includes("Félicitations ! Aucune erreur trouvée.") &&
-        !res.includes("Désolé ! Les erreurs suivantes ont été trouvées")
-    ).toBeTruthy();
+    const stylesheetUrl = await page.evaluate(() => {
+      const firstStylesheet = document.querySelector('link[rel~="stylesheet"][href]');
+      if (!firstStylesheet) {
+        return "";
+      }
+      return new URL(firstStylesheet.getAttribute("href"), document.baseURI).toString();
+    });
+
+    if (!stylesheetUrl) {
+      throw new Error("No stylesheet found on current page");
+    }
+
+    const stylesheetResponse = await fetch(stylesheetUrl);
+    const stylesheetContent = await stylesheetResponse.text();
+    if (!stylesheetResponse.ok) {
+      throw new Error(
+        `Failed to fetch stylesheet (${stylesheetResponse.status} ${stylesheetResponse.statusText}) from ${stylesheetUrl}. Response body: ${stylesheetContent.slice(
+          0,
+          500
+        )}`
+      );
+    }
+
+    const validationResult = await global.fetchJsonWithDetails(`${htmlValidatorUrl}?out=json&level=error`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "text/css; charset=utf-8",
+      },
+      body: stylesheetContent,
+    });
+
+    const cssErrors = (validationResult.messages || []).filter(
+      message => message.type === "error"
+    );
+    expect(cssErrors.length).toBe(0);
   });
-  */
 };
 
 global.getInnerText = (selector) => {

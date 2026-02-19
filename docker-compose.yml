@@ -1,4 +1,7 @@
 services:
+  validator:
+    image: ghcr.io/validator/validator:latest
+    restart: always
   web:
     build: .
     env_file: .env
@@ -20,6 +23,7 @@ services:
       - "traefik.http.routers.html_classroom_monitor_secured.tls.certresolver=myresolver"
     networks:
       - web
+      - default
 volumes:
    db-data:
      driver: local
