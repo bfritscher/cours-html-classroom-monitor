@@ -117,7 +117,14 @@ function renderAdminScores(scores) {
   const container = document.getElementById("scores");
   container.innerHTML = "";
 
-  const assignments = Array.from(new Set(scores.map(score => score.assignment))).sort();
+  const assignments = [];
+  const seenAssignments = new Set();
+  scores.forEach(score => {
+    if (!seenAssignments.has(score.assignment)) {
+      seenAssignments.add(score.assignment);
+      assignments.push(score.assignment);
+    }
+  });
   const students = Array.from(new Set(scores.map(score => score.email))).sort();
   const values = {};
 
@@ -130,7 +137,7 @@ function renderAdminScores(scores) {
   students.forEach(student => {
     const row = document.createElement("tr");
     const firstCell = document.createElement("td");
-    firstCell.innerText = student;
+    firstCell.innerText = student.split("@")[0].split(".").map(s => s[0].toUpperCase() + s.slice(1)).join(" ");
     row.appendChild(firstCell);
 
     assignments.forEach(assignment => {
@@ -142,6 +149,23 @@ function renderAdminScores(scores) {
 
     tbody.appendChild(row);
   });
+
+  const tfoot = document.createElement("tfoot");
+  const totalRow = document.createElement("tr");
+  totalRow.className = "table-secondary fw-bold";
+  const totalLabelCell = document.createElement("td");
+  totalLabelCell.innerText = `Total (${students.length})`;
+  totalRow.appendChild(totalLabelCell);
+
+  assignments.forEach(assignment => {
+    const totalCell = document.createElement("td");
+    const countWithHundred = students.filter(student => Number(values[`${student}::${assignment}`]) === 100).length;
+    totalCell.innerText = `${countWithHundred}`;
+    totalRow.appendChild(totalCell);
+  });
+
+  tfoot.appendChild(totalRow);
+  table.appendChild(tfoot);
 
   if (students.length === 0 || assignments.length === 0) {
     container.innerText = "No scores available yet.";
