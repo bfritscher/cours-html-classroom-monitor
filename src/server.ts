@@ -93,6 +93,32 @@ app.post(
 );
 
 app.post(
+  "/api/scores",
+  ensureUser,
+  (req: express.Request, res: express.Response) => {
+    const query: any = {
+      attributes: ["assignment", "email", "check_status", "check_date"],
+      where: {
+        check_status: {
+          [Sequelize.Op.not]: null
+        }
+      }
+    };
+
+    if (!req.user.isAdmin) {
+      query.where.email = req.user.email;
+    }
+
+    Submission.findAll(query).then(scores => {
+      res.json(scores);
+    }, e => {
+      console.log("scores query error", e);
+      res.sendStatus(500);
+    });
+  }
+);
+
+app.post(
   "/api/submit",
   ensureUser,
   (req: express.Request, res: express.Response) => {
