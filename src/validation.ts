@@ -1,8 +1,19 @@
 import Queue from "better-queue";
 import fs from "fs";
 
+import os from "os";
+import path from "path";
 import { spawn } from "child_process";
 import { Submission } from "./db";
+import {
+  chromeCleanupEnabled,
+  createJobTmpDir,
+  killProcessTree,
+  removeDir,
+  startChromeSweeper
+} from "./chromeCleanup";
+
+startChromeSweeper();
 
 const screenshotDir = "./public/screenshots";
 if (!fs.existsSync(screenshotDir)) {
@@ -200,17 +211,28 @@ export function spawnTestProcess(task: any, cb: (error: any, result: any) => voi
     });
   };
 
-  const test = spawn(
-    "node",
-    ["node_modules/jest/bin/jest.js", task.assignment, "--json"],
-    {
-      env: {
-        ...process.env,
-        TestURL: task.url,
-        TestUser: task.email
-      },
+  const jobTmpDir = chromeCleanupEnabled ? createJobTmpDir() : "";
+  const jestArgs = ["node_modules/jest/bin/jest.js", task.assignment, "--json"];
+  if (jobTmpDir) {
+    // keep the jest cache shared instead of per job
+    jestArgs.push("--cacheDirectory", path.join(os.tmpdir(), "jest_cache"));
+  }
+  const test = spawn("node", jestArgs, {
+    detached: chromeCleanupEnabled,
+    env: {
+      ...process.env,
+      ...(jobTmpDir ? { TMPDIR: jobTmpDir } : {}),
+      TestURL: task.url,
+      TestUser: task.email
+    },
+  });
+  const cleanupJob = () => {
+    if (!chromeCleanupEnabled) {
+      return;
     }
-  );
+    killProcessTree(test.pid);
+    removeDir(jobTmpDir);
+  };
   test.stdout.on("data", data => {
     const chunk = data.toString();
     result += chunk;
@@ -225,7 +247,11 @@ export function spawnTestProcess(task: any, cb: (error: any, result: any) => voi
   });
   test.on("error", err => {
     console.log("spawn err", err);
-    finalizeTask("error", Date.now());
+    try {
+      finalizeTask("error", Date.now());
+    } finally {
+      cleanupJob();
+    }
     cb(err, null);
   });
   test.on("close", code => {
@@ -238,8 +264,12 @@ export function spawnTestProcess(task: any, cb: (error: any, result: any) => voi
     } else {
       task.result = result || "{}";
     }
-    saveResult(task);
-    finalizeTask(code === 0 ? "ok" : "failed", Date.now(), code ?? undefined);
+    try {
+      saveResult(task);
+      finalizeTask(code === 0 ? "ok" : "failed", Date.now(), code ?? undefined);
+    } finally {
+      cleanupJob();
+    }
     cb(null, task.result);
   });
 }
