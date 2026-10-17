@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install curl gnupg -y \
   && curl --location --silent https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
   && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
   && apt-get update \
-  && apt-get install google-chrome-stable -y --no-install-recommends \
+  && apt-get install google-chrome-stable tini -y --no-install-recommends \
   && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /app
@@ -17,5 +17,8 @@ COPY ./package.json /app
 RUN npm install
 COPY . /app
 RUN npm run build-ts
+# tini reaps zombie Chrome processes (alternatively run with `docker run --init`).
+# Chrome temp dirs live in /tmp; consider mounting it as tmpfs (see readme).
+ENTRYPOINT ["/usr/bin/tini", "--"]
 # Define default command.
 CMD ["node", "dist/server.js"]
